@@ -7,6 +7,8 @@ import { Card } from "@/components/ui/card";
 import { Sparkles, RefreshCw } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Markdown from "react-markdown";
+import { db } from "@/src/lib/firebase";
+import { doc, getDoc, setDoc, serverTimestamp } from "firebase/firestore";
 
 interface SurveyAIProps {
   survey: Survey;
@@ -24,26 +26,68 @@ export default function SurveyAI({ survey, responses }: SurveyAIProps) {
     ? responses 
     : responses.filter(r => r.country === countryFilter);
 
-  const generate = async () => {
-    if (responses.length === 0) return;
+  const generate = async (force: boolean = false) => {
+    if (filteredResponses.length === 0) return;
+    
+    const analysisId = `${survey.id}_${i18n.language}_${countryFilter.toLowerCase()}`;
+    const analysisRef = doc(db, "survey_analyses", analysisId);
+
+    if (!force) {
+      setLoading(true);
+      try {
+        const cachedDoc = await getDoc(analysisRef);
+        if (cachedDoc.exists()) {
+          const data = cachedDoc.data();
+          // Reuse if response count is the same (or very close)
+          if (data.responseCount === filteredResponses.length) {
+            setSummary(data.summary);
+            setLoading(false);
+            return;
+          }
+        }
+      } catch (e) {
+        console.error("Cache read error:", e);
+      }
+    }
+
     setLoading(true);
     const title = survey.title[i18n.language as "pt" | "en" | "es"] || survey.title.en;
-    const text = await generateSurveySummary(
-      title, 
-      survey.questions, 
-      filteredResponses, 
-      i18n.language, 
-      countryFilter === "Global" ? undefined : countryFilter
-    );
-    setSummary(text || "No insights generated.");
-    setLoading(false);
+    
+    try {
+      const text = await generateSurveySummary(
+        title, 
+        survey.questions, 
+        filteredResponses, 
+        i18n.language, 
+        countryFilter === "Global" ? undefined : countryFilter
+      );
+
+      if (text) {
+        setSummary(text);
+        // Cache the result
+        await setDoc(analysisRef, {
+          surveyId: survey.id,
+          lang: i18n.language,
+          countryFilter,
+          summary: text,
+          responseCount: filteredResponses.length,
+          updatedAt: serverTimestamp()
+        }, { merge: true });
+      } else {
+        setSummary("No insights generated.");
+      }
+    } catch (error) {
+      setSummary("Failed to generate insights.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   useEffect(() => {
     if (responses.length > 0) {
       generate();
     }
-  }, [countryFilter, responses.length]);
+  }, [countryFilter, responses.length, i18n.language]);
 
   if (responses.length === 0) {
     return (
@@ -76,7 +120,7 @@ export default function SurveyAI({ survey, responses }: SurveyAIProps) {
           <Button 
             variant="outline" 
             size="sm" 
-            onClick={generate} 
+            onClick={() => generate(true)} 
             disabled={loading}
             className="gap-2 rounded-xl border-slate-700 bg-slate-900 font-bold text-xs h-10 px-4"
           >

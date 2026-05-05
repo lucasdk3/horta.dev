@@ -61,6 +61,21 @@
         "createdAt": { "type": "string", "format": "date-time" }
       },
       "required": ["title", "description", "requesterId", "status", "createdAt"]
+    },
+    "SurveyAnalysis": {
+      "title": "Survey Analysis",
+      "description": "Cached AI generated analysis for a survey.",
+      "type": "object",
+      "properties": {
+        "surveyId": { "type": "string" },
+        "lang": { "type": "string" },
+        "countryFilter": { "type": "string" },
+        "summary": { "type": "string", "description": "Markdown text" },
+        "insights": { "type": "object", "description": "Structured JSON data" },
+        "responseCount": { "type": "integer" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["surveyId", "lang", "countryFilter", "summary", "responseCount", "updatedAt"]
     }
   },
   "firestore": {
@@ -79,6 +94,10 @@
     "/survey_requests/{requestId}": {
       "schema": "SurveyRequest",
       "description": "Collection of community requested surveys."
+    },
+    "/survey_analyses/{analysisId}": {
+      "schema": "SurveyAnalysis",
+      "description": "Cached AI analyses to optimize token usage."
     }
   }
 }

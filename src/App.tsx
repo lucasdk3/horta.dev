@@ -22,6 +22,7 @@ import { LayoutGrid, FileText, BarChart3, Presentation, MessageSquare, Plus, Arr
 import RequestSurveyModal from "./components/RequestSurveyModal";
 import AdminDashboard from "./components/AdminDashboard";
 import GlobalAssistant from "./components/GlobalAssistant";
+import Logo from "./components/Logo";
 
 function Home({ isAdmin }: { isAdmin: boolean }) {
   const { t, i18n } = useTranslation();
@@ -54,14 +55,17 @@ function Home({ isAdmin }: { isAdmin: boolean }) {
       <header className="mb-20">
         <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-8">
           <div className="space-y-4">
-            <motion.h1 
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              className="text-6xl md:text-8xl font-black tracking-tightest uppercase text-white leading-[0.9]"
-            >
-              Horta<br/>
-              <span className="opacity-20 italic">Cultive Conhecimento</span>
-            </motion.h1>
+            <div className="flex items-center gap-6">
+              <Logo size={120} className="hidden md:block drop-shadow-[0_0_30px_rgba(16,185,129,0.3)]" />
+              <motion.h1 
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                className="text-6xl md:text-8xl font-black tracking-tightest uppercase text-white leading-[0.9]"
+              >
+                Horta<br/>
+                <span className="opacity-20 italic">Cultive Conhecimento</span>
+              </motion.h1>
+            </div>
             <p className="text-xl text-slate-500 max-w-xl font-medium tracking-tight">
               {t('home.subtitle')}
             </p>

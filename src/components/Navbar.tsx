@@ -3,9 +3,10 @@ import { auth, signInWithGoogle } from "@/src/lib/firebase";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { Link } from "react-router-dom";
 import { Button, buttonVariants } from "@/components/ui/button";
-import { Sprout, Search, LogIn } from "lucide-react";
+import { Search, LogIn } from "lucide-react";
 import { motion } from "motion/react";
 import UserMenu from "./UserMenu";
+import Logo from "./Logo";
 
 export default function Navbar() {
   const { t, i18n } = useTranslation();
@@ -31,10 +32,8 @@ export default function Navbar() {
             className="flex items-center gap-3"
           >
             <div className="relative group">
-              <div className="w-10 h-10 bg-emerald-600 rounded-2xl flex items-center justify-center text-white shadow-xl shadow-emerald-500/20 z-10 relative">
-                <Sprout className="w-5 h-5 group-hover:scale-125 transition-transform" />
-              </div>
-              <div className="absolute -top-1 -right-1 w-5 h-5 bg-white rounded-lg flex items-center justify-center text-emerald-600 shadow-md transform rotate-12 group-hover:rotate-0 transition-transform">
+              <Logo size={48} className="z-10 relative" />
+              <div className="absolute -top-1 -right-1 w-5 h-5 bg-white rounded-lg flex items-center justify-center text-emerald-600 shadow-md transform rotate-12 group-hover:rotate-0 transition-transform z-20">
                 <Search className="w-3 h-3" />
               </div>
             </div>

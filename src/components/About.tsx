@@ -157,24 +157,45 @@ export default function About() {
         </p>
       </motion.div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 auto-rows-[340px] md:auto-rows-[420px] gap-6">
-        {/* Mission Card */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 auto-rows-auto md:auto-rows-[440px] gap-6">
+        {/* Gap Card - The Problem */}
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="md:col-span-2 bento-card flex flex-col justify-between"
+          className="lg:col-span-2 bento-card flex flex-col justify-between"
         >
           <div className="absolute -right-12 -top-12 text-[12rem] font-black opacity-[0.03] select-none pointer-events-none accent-blue">01</div>
           <div className="relative z-10">
             <div className="flex items-center gap-4 mb-8">
               <div className="w-14 h-14 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center accent-blue shadow-xl">
-                <Sprout className="w-6 h-6" />
+                <Leaf className="w-6 h-6" />
               </div>
-              <h2 className="text-3xl font-black text-white uppercase tracking-tight">{t("about.mission.title")}</h2>
+              <h2 className="text-3xl font-black text-white uppercase tracking-tight">O Gap</h2>
             </div>
             <div className="space-y-4 text-slate-400 leading-relaxed font-medium text-lg">
               <p>{t("about.mission.p1")}</p>
               <p>{t("about.mission.p2")}</p>
+              <p className="hidden md:block">{t("about.mission.p3")}</p>
+              <p className="font-black text-white border-l-4 border-emerald-500 pl-4 py-2 bg-emerald-500/5">{t("about.mission.p4")}</p>
+            </div>
+          </div>
+        </motion.div>
+
+        {/* Concept Card - The Idea */}
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.1 }}
+          className="bento-card flex flex-col justify-between"
+        >
+          <div className="absolute -right-12 -top-12 text-[12rem] font-black opacity-[0.03] select-none pointer-events-none accent-emerald">02</div>
+          <div className="relative z-10">
+            <div className="w-14 h-14 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center accent-emerald shadow-xl mb-8">
+              <Sprout className="w-6 h-6" />
+            </div>
+            <h2 className="text-3xl font-black text-white uppercase tracking-tight mb-6">O Conceito</h2>
+            <div className="space-y-6 text-slate-400 font-medium leading-relaxed">
+              <p>{t("about.mission.p5")}</p>
             </div>
           </div>
         </motion.div>
@@ -183,10 +204,10 @@ export default function About() {
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.1 }}
+          transition={{ delay: 0.15 }}
           className="bento-card flex flex-col justify-between"
         >
-          <div className="absolute -right-12 -top-12 text-[12rem] font-black opacity-[0.03] select-none pointer-events-none accent-purple">02</div>
+          <div className="absolute -right-12 -top-12 text-[12rem] font-black opacity-[0.03] select-none pointer-events-none accent-purple">03</div>
           <div className="relative z-10 h-full flex flex-col justify-between">
             <div>
                <div className="w-14 h-14 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center accent-purple shadow-xl mb-8">
@@ -208,14 +229,52 @@ export default function About() {
           </div>
         </motion.div>
 
-        {/* Contribute Card */}
+        {/* Impact Card - Seasoning */}
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
           className="bento-card flex flex-col justify-between"
         >
-          <div className="absolute -right-12 -top-12 text-[12rem] font-black opacity-[0.03] select-none pointer-events-none accent-red">03</div>
+          <div className="absolute -right-12 -top-12 text-[12rem] font-black opacity-[0.03] select-none pointer-events-none accent-orange">04</div>
+          <div className="relative z-10">
+            <div className="w-14 h-14 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center accent-orange shadow-xl mb-8">
+              <MessageSquare className="w-6 h-6" />
+            </div>
+            <h2 className="text-3xl font-black text-white uppercase tracking-tight mb-6">Processo</h2>
+            <div className="space-y-4 text-slate-400 font-medium leading-relaxed">
+              <p>{t("about.mission.p6")}</p>
+            </div>
+          </div>
+        </motion.div>
+
+        {/* Goal Card */}
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.25 }}
+          className="bento-card bg-emerald-600/10 border-emerald-500/20 flex flex-col justify-between"
+        >
+          <div className="absolute -right-12 -top-12 text-[12rem] font-black opacity-[0.05] select-none pointer-events-none text-emerald-500">05</div>
+          <div className="relative z-10">
+            <div className="w-14 h-14 rounded-2xl bg-emerald-600 flex items-center justify-center text-white shadow-xl shadow-emerald-500/20 mb-8">
+              <Sprout className="w-6 h-6" />
+            </div>
+            <h2 className="text-3xl font-black text-white uppercase tracking-tight mb-6">Nosso Objetivo</h2>
+            <div className="space-y-4 text-white font-bold leading-relaxed text-lg">
+              <p>{t("about.mission.p7")}</p>
+            </div>
+          </div>
+        </motion.div>
+
+        {/* Contribute Card */}
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.3 }}
+          className="bento-card flex flex-col justify-between"
+        >
+          <div className="absolute -right-12 -top-12 text-[12rem] font-black opacity-[0.03] select-none pointer-events-none accent-red">06</div>
           <div className="relative z-10">
             <div className="w-14 h-14 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center accent-red shadow-xl mb-8">
               <Flower className="w-6 h-6" />
@@ -242,16 +301,16 @@ export default function About() {
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.3 }}
-          className="md:col-span-2 bento-card flex flex-col justify-between"
+          transition={{ delay: 0.35 }}
+          className="lg:col-span-3 bento-card flex flex-col justify-between"
         >
-          <div className="absolute -right-12 -top-12 text-[12rem] font-black opacity-[0.03] select-none pointer-events-none accent-yellow">04</div>
+          <div className="absolute -right-12 -top-12 text-[12rem] font-black opacity-[0.03] select-none pointer-events-none accent-yellow">07</div>
           <div className="relative z-10">
             <div className="w-14 h-14 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center accent-yellow shadow-xl mb-8">
               <Shield className="w-6 h-6" />
             </div>
             <h2 className="text-3xl font-black text-white uppercase tracking-tight mb-6">{t("nav.privacy")}</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-x-12 gap-y-4">
                {[
                  "Dados anonimizados processados no jardim.",
                  "Sua privacidade é nossa maior raiz.",
