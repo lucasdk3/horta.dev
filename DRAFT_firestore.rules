@@ -1,0 +1,72 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Global Safety Net
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isEmailVerified() {
+      return request.auth.token.email_verified == true;
+    }
+
+    function isValidId(id) {
+      return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    function isAdmin() {
+      return isSignedIn() && exists(/databases/$(database)/documents/users/$(request.auth.uid)) && 
+             get(/databases/$(database)/documents/users/$(request.auth.uid)).data.isAdmin == true;
+    }
+
+    // Helper for Survey
+    function isValidSurvey(data) {
+      return data.keys().hasAll(['title', 'questions', 'createdAt', 'active']) &&
+             data.title is map &&
+             data.questions is list &&
+             data.createdAt == request.time;
+    }
+
+    match /surveys/{surveyId} {
+      allow read: if true;
+      allow create, update: if isAdmin() && isValidSurvey(request.resource.data);
+      allow delete: if isAdmin();
+    }
+
+    // Helper for Response
+    function isValidResponse(data) {
+      return data.keys().hasAll(['surveyId', 'respondentId', 'respondentEmail', 'country', 'answers', 'createdAt']) &&
+             data.surveyId is string &&
+             data.respondentId == request.auth.uid &&
+             data.respondentEmail == request.auth.token.email &&
+             data.country is string &&
+             data.answers is map &&
+             data.createdAt == request.time;
+    }
+
+    match /responses/{responseId} {
+      // Allow creation if the responseId is surveyId_userId to enforce uniqueness
+      // and checking survey existence
+      allow create: if isSignedIn() && 
+                    isEmailVerified() &&
+                    isValidResponse(request.resource.data) &&
+                    responseId == request.resource.data.surveyId + '_' + request.auth.uid &&
+                    exists(/databases/$(database)/documents/surveys/$(request.resource.data.surveyId));
+      
+      // Allow reading responses for analytics
+      allow list, get: if isSignedIn();
+    }
+
+    match /users/{userId} {
+      allow read: if isSignedIn();
+      allow create, update: if isSignedIn() && userId == request.auth.uid && 
+                            // Prevent self-elevation to admin
+                            (request.resource.data.isAdmin == (resource != null ? resource.data.isAdmin : false));
+    }
+  }
+}
