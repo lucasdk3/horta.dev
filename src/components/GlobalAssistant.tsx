@@ -96,7 +96,7 @@ export default function GlobalAssistant({ surveys }: GlobalAssistantProps) {
                     <Sparkles className="w-4 h-4" />
                   </div>
                   <div>
-                    <h3 className="text-xs font-black uppercase tracking-widest text-white leading-none mb-1">DevSurvey Assistant</h3>
+                    <h3 className="text-xs font-black uppercase tracking-widest text-white leading-none mb-1">Horta Assistant</h3>
                     <p className="text-[9px] text-white/60 font-bold uppercase tracking-tight">Active & Intelligence</p>
                   </div>
                 </div>

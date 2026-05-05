@@ -60,7 +60,7 @@ function Home({ isAdmin }: { isAdmin: boolean }) {
               className="text-6xl md:text-8xl font-black tracking-tightest uppercase text-white leading-[0.9]"
             >
               Horta<br/>
-              <span className="opacity-20 italic">Cultivo</span>
+              <span className="opacity-20 italic">Cultive Conhecimento</span>
             </motion.h1>
             <p className="text-xl text-slate-500 max-w-xl font-medium tracking-tight">
               {t('home.subtitle')}

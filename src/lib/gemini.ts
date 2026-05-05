@@ -49,7 +49,7 @@ export async function chatWithResearch(
   lang: string
 ) {
   const systemContext = `
-    You are a Research Assistant for the DevSurvey platform.
+    You are a Research Assistant for the Horta platform.
     You have access to the results of the survey: "${surveyTitle}".
     
     Data Context:
@@ -73,7 +73,7 @@ export async function chatWithResearch(
       history: history.length > 0 ? history : [],
     });
 
-    const response = await chat.sendMessage(message);
+    const response = await chat.sendMessage({ message });
     return response.text;
   } catch (error) {
     console.error("Gemini Chat Error:", error);
@@ -88,7 +88,7 @@ export async function chatWithGlobalResearch(
   lang: string
 ) {
   const systemContext = `
-    You are the DevSurvey Hub Platform Assistant.
+    You are the Horta Platform Assistant.
     You help users navigate through the community research projects.
     
     Current Surveys Catalog:
@@ -110,7 +110,7 @@ export async function chatWithGlobalResearch(
       history: history.length > 0 ? history : [],
     });
 
-    const response = await chat.sendMessage(message);
+    const response = await chat.sendMessage({ message });
     return response.text;
   } catch (error) {
     console.error("Global Gemini Chat Error:", error);
