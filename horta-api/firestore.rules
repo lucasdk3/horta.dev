@@ -1,0 +1,117 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Global Safety Net
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // --- Helpers ---
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isEmailVerified() {
+      return request.auth.token.email_verified == true;
+    }
+
+    function isValidId(id) {
+      return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    function incoming() {
+      return request.resource.data;
+    }
+
+    function existing() {
+      return resource.data;
+    }
+
+    function isAdmin() {
+      return isSignedIn() && (
+        (exists(/databases/$(database)/documents/users/$(request.auth.uid)) && 
+         get(/databases/$(database)/documents/users/$(request.auth.uid)).data.isAdmin == true) ||
+        request.auth.token.email == 'lucasbatista1996@gmail.com'
+      );
+    }
+
+    // --- Survey Validation ---
+    function isValidSurvey(data) {
+      return data.keys().hasAll(['title', 'questions', 'active', 'createdAt']) &&
+             data.title is map &&
+             data.questions is list &&
+             data.active is bool &&
+             data.createdAt == request.time;
+    }
+
+    match /surveys/{surveyId} {
+      allow read: if true;
+      allow create: if isAdmin() && isValidSurvey(incoming());
+      allow update: if isAdmin() && isValidSurvey(incoming());
+      allow delete: if isAdmin();
+    }
+
+    // --- Response Validation ---
+    function isValidResponse(data) {
+      return data.keys().hasAll(['surveyId', 'respondentId', 'respondentEmail', 'country', 'answers', 'createdAt']) &&
+             isValidId(data.surveyId) &&
+             data.respondentId == request.auth.uid &&
+             data.respondentEmail == request.auth.token.email &&
+             data.country is string && data.country.size() <= 100 &&
+             data.answers is map &&
+             data.createdAt == request.time;
+    }
+
+    match /responses/{responseId} {
+      allow create: if isSignedIn() && 
+                    isValidResponse(incoming()) &&
+                    responseId == incoming().surveyId + '_' + request.auth.uid &&
+                    exists(/databases/$(database)/documents/surveys/$(incoming().surveyId));
+      
+      // Strict List Query Enforcement
+      allow list, get: if true;
+    }
+
+    // --- User Validation ---
+    function isValidUser(data) {
+      return data.keys().hasAll(['email', 'isAdmin', 'createdAt']) &&
+             data.email is string &&
+             data.isAdmin is bool &&
+             data.createdAt is timestamp;
+    }
+
+    match /users/{userId} {
+      allow read: if isSignedIn();
+      allow create: if isSignedIn() && userId == request.auth.uid && 
+                    incoming().isAdmin == false &&
+                    isValidUser(incoming());
+      
+      allow update: if isSignedIn() && userId == request.auth.uid && 
+                    incoming().isAdmin == existing().isAdmin &&
+                    isValidUser(incoming());
+    }
+
+    // --- Survey Request Validation ---
+    function isValidSurveyRequest(data) {
+      return data.keys().hasAll(['title', 'description', 'requesterId', 'status', 'createdAt']) &&
+             data.title is string && data.title.size() <= 200 &&
+             data.description is string && data.description.size() <= 1000 &&
+             data.requesterId == request.auth.uid &&
+             data.status in ['pending', 'approved', 'rejected'] &&
+             data.createdAt == request.time;
+    }
+
+    match /survey_requests/{requestId} {
+      allow read, list: if isAdmin() || (isSignedIn() && resource.data.requesterId == request.auth.uid);
+      allow create: if isSignedIn() && isValidSurveyRequest(incoming()) && incoming().status == 'pending';
+      allow update: if isAdmin();
+      allow delete: if isAdmin();
+    }
+
+    match /survey_analyses/{analysisId} {
+      allow read: if true;
+      allow create, update: if isSignedIn();
+    }
+  }
+}

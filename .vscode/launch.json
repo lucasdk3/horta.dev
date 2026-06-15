@@ -1,0 +1,38 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "horta-platform (dev)",
+            "cwd": "horta-platform",
+            "request": "launch",
+            "type": "dart",
+            "program": "lib/main_dev.dart",
+            "args": ["--flavor", "dev"]
+        },
+        {
+            "name": "horta-platform (stg)",
+            "cwd": "horta-platform",
+            "request": "launch",
+            "type": "dart",
+            "program": "lib/main_stg.dart",
+            "args": ["--flavor", "stg"]
+        },
+        {
+            "name": "horta-platform (prd)",
+            "cwd": "horta-platform",
+            "request": "launch",
+            "type": "dart",
+            "program": "lib/main_prd.dart",
+            "args": ["--flavor", "prd"]
+        },
+        {
+            "name": "horta-platform (prd, profile)",
+            "cwd": "horta-platform",
+            "request": "launch",
+            "type": "dart",
+            "program": "lib/main_prd.dart",
+            "args": ["--flavor", "prd"],
+            "flutterMode": "profile"
+        }
+    ]
+}

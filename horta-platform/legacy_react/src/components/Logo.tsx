@@ -1,0 +1,79 @@
+import React from 'react';
+import { motion } from 'motion/react';
+
+interface LogoProps {
+  className?: string;
+  size?: number;
+}
+
+export default function Logo({ className = "", size = 40 }: LogoProps) {
+  return (
+    <motion.div 
+      className={`relative flex items-center justify-center ${className}`}
+      whileHover={{ scale: 1.05 }}
+      style={{ width: size, height: size }}
+    >
+      <svg 
+        viewBox="0 0 100 100" 
+        fill="none" 
+        xmlns="http://www.w3.org/2000/svg"
+        className="w-full h-full drop-shadow-[0_0_8px_rgba(16,185,129,0.5)]"
+      >
+        {/* Pot */}
+        <path 
+          d="M30 65C30 62.2386 32.2386 60 35 60H65C67.7614 60 70 62.2386 70 65V80C70 85.5228 65.5228 90 60 90H40C34.4772 90 30 85.5228 30 80V65Z" 
+          fill="#020402" 
+          stroke="#10b981" 
+          strokeWidth="2"
+        />
+        {/* Code symbol on pot */}
+        <path 
+          d="M42 70L38 75L42 80M58 70L62 75L58 80M52 68L48 82" 
+          stroke="#10b981" 
+          strokeWidth="1.5" 
+          strokeLinecap="round" 
+          strokeLinejoin="round" 
+        />
+
+        {/* Stem */}
+        <path 
+          d="M50 60V45" 
+          stroke="#10b981" 
+          strokeWidth="3" 
+          strokeLinecap="round" 
+        />
+
+        {/* Middle Leaf (Tech Leaf) */}
+        <path 
+          d="M50 45C50 45 35 35 35 25C35 15 45 10 50 10C55 10 65 15 65 25C65 35 50 45 50 45Z" 
+          fill="#10b981" 
+          fillOpacity="0.9"
+        />
+        {/* Circuit traces on middle leaf */}
+        <path 
+          d="M50 40V25M50 25L45 20M50 28L55 23" 
+          stroke="#020402" 
+          strokeWidth="1.5" 
+          strokeLinecap="round" 
+        />
+        <circle cx="50" cy="25" r="1.5" fill="#020402" />
+        <circle cx="45" cy="20" r="1" fill="#020402" />
+        <circle cx="55" cy="23" r="1" fill="#020402" />
+
+        {/* Left Leaf */}
+        <path 
+          d="M48 55C48 55 35 55 28 48C21 41 25 35 30 35C35 35 48 55 48 55Z" 
+          fill="#10b981" 
+          fillOpacity="0.7"
+        />
+
+        {/* Right Leaf */}
+        <path 
+          d="M52 55C52 55 65 55 72 48C79 41 75 35 70 35C65 35 52 55 52 55Z" 
+          fill="#10b981" 
+          fillOpacity="0.7"
+        />
+      </svg>
+    </motion.div>
+  );
+}
